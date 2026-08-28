@@ -1347,3 +1347,50 @@ textarea.form-control {
     bottom: 1rem;
   }
 }
+
+@media (max-width: 360px) {
+  .navbar .container {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  .navbar-inner {
+    gap: 0.35rem;
+  }
+
+  .brand-logo {
+    gap: 0.4rem;
+  }
+
+  .brand-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .brand-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .brand-title {
+    font-size: 0.95rem;
+  }
+
+  .nav-actions {
+    gap: 0.2rem;
+  }
+
+  .nav-actions .btn-icon {
+    min-width: 30px;
+    width: 30px;
+    min-height: 30px;
+    height: 30px;
+    padding: 0.35rem;
+  }
+
+  .nav-cash-btn {
+    min-height: 30px;
+    padding: 0.3rem 0.45rem;
+    font-size: 0.7rem;
+  }
+}
