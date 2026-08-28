@@ -71,7 +71,13 @@ export const loginUser = (email, password) =>
   });
 
 // Dashboard & Cash APIs
-export const getDashboardData = () => request('/dashboard');
+export const getDashboardData = (params = {}) => {
+  const query = new URLSearchParams();
+  if (params.startDate) query.append('startDate', params.startDate);
+  if (params.endDate) query.append('endDate', params.endDate);
+  const qs = query.toString() ? `?${query.toString()}` : '';
+  return request(`/dashboard${qs}`);
+};
 export const getCashStatus = () => request('/cash');
 export const updateInitialCash = (initialCash) =>
   request('/cash', {

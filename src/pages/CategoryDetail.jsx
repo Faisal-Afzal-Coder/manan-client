@@ -3,7 +3,6 @@ import {
   ArrowLeft,
   Plus,
   Search,
-  Calendar,
   Edit2,
   Trash2,
   Inbox,
@@ -14,6 +13,7 @@ import {
   FileSpreadsheet,
   TrendingUp
 } from 'lucide-react';
+import DateRangeFilter from '../components/DateRangeFilter';
 import {
   getRecordsByCategory,
   formatCurrency,
@@ -26,7 +26,9 @@ export default function CategoryDetail({
   onOpenAddRecord,
   onOpenEditRecord,
   onOpenDeleteConfirm,
-  refreshTrigger
+  refreshTrigger,
+  dateRange,
+  onDateRangeChange
 }) {
   const [records, setRecords] = useState([]);
   const [categoryInfo, setCategoryInfo] = useState(category);
@@ -35,8 +37,6 @@ export default function CategoryDetail({
 
   // Filter states
   const [searchTerm, setSearchTerm] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
 
   const isIncome = Boolean(
     categoryInfo?.isIncome ||
@@ -50,8 +50,8 @@ export default function CategoryDetail({
       setError(null);
       const res = await getRecordsByCategory(category.slug || category.name, {
         search: searchTerm,
-        startDate,
-        endDate
+        startDate: dateRange.startDate,
+        endDate: dateRange.endDate
       });
 
       if (res.success) {
@@ -69,15 +69,14 @@ export default function CategoryDetail({
 
   useEffect(() => {
     fetchRecords();
-  }, [category, refreshTrigger, searchTerm, startDate, endDate]);
+  }, [category, refreshTrigger, searchTerm, dateRange]);
 
   const clearFilters = () => {
     setSearchTerm('');
-    setStartDate('');
-    setEndDate('');
+    onDateRangeChange({ preset: 'all', startDate: '', endDate: '' });
   };
 
-  const hasFilters = searchTerm || startDate || endDate;
+  const hasFilters = searchTerm || dateRange.preset !== 'all';
   const totalAmount = categoryInfo?.totalAmount || 0;
   const recordCount = categoryInfo?.recordCount || 0;
 
@@ -187,27 +186,7 @@ export default function CategoryDetail({
         </div>
 
         <div className="date-filters">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <Calendar size={14} color="#94a3b8" />
-            <input
-              type="date"
-              className="date-input"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-              title="Filter from start date"
-              id="input-filter-start-date"
-            />
-            <span style={{ color: '#64748b' }}>to</span>
-            <input
-              type="date"
-              className="date-input"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-              title="Filter to end date"
-              id="input-filter-end-date"
-            />
-          </div>
-
+          <DateRangeFilter value={dateRange} onChange={onDateRangeChange} />
           {hasFilters && (
             <button className="btn btn-secondary btn-sm" onClick={clearFilters} title="Clear all filters">
               <X size={14} /> Clear

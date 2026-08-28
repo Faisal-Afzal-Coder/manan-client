@@ -2,6 +2,7 @@ import React from 'react';
 import { Layers, Plus, AlertCircle, TrendingUp, TrendingDown } from 'lucide-react';
 import CashCard from '../components/CashCard';
 import CategoryCard from '../components/CategoryCard';
+import DateRangeFilter from '../components/DateRangeFilter';
 
 export default function Dashboard({
   dashboardData,
@@ -10,7 +11,9 @@ export default function Dashboard({
   onOpenAddCategoryModal,
   onOpenReceiveMoney,
   loading,
-  error
+  error,
+  dateRange,
+  onDateRangeChange
 }) {
   const cash = dashboardData?.cash;
   const categories = dashboardData?.categories || [];
@@ -38,6 +41,14 @@ export default function Dashboard({
           </div>
         </div>
       )}
+
+      <div className="dashboard-filter-bar">
+        <div>
+          <strong>Showing financial activity</strong>
+          <span>Choose a period to update this dashboard</span>
+        </div>
+        <DateRangeFilter value={dateRange} onChange={onDateRangeChange} />
+      </div>
 
       {/* 1. HERO CASH CARD */}
       <CashCard

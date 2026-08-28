@@ -8,6 +8,7 @@ import CashModal from './components/CashModal';
 import ConfirmModal from './components/ConfirmModal';
 import CategoryModal from './components/CategoryModal';
 import Toast from './components/Toast';
+import { defaultDateRange } from './components/DateRangeFilter';
 import {
   getDashboardData,
   createRecord,
@@ -35,6 +36,7 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [refreshTrigger, setRefreshTrigger] = useState(Date.now());
+  const [dateRange, setDateRange] = useState(defaultDateRange);
 
   // Toast System
   const [toasts, setToasts] = useState([]);
@@ -103,7 +105,7 @@ export default function App() {
     try {
       setLoading(true);
       setError(null);
-      const res = await getDashboardData();
+      const res = await getDashboardData(dateRange);
       if (res.success) {
         setDashboardData(res.data);
       }
@@ -114,7 +116,7 @@ export default function App() {
     } finally {
       setLoading(false);
     }
-  }, [currentUser]);
+  }, [currentUser, dateRange]);
 
   useEffect(() => {
     if (currentUser) {
@@ -292,6 +294,8 @@ export default function App() {
             onOpenReceiveMoney={handleOpenReceiveMoney}
             loading={loading}
             error={error}
+            dateRange={dateRange}
+            onDateRangeChange={setDateRange}
           />
         ) : (
           <CategoryDetail
@@ -301,6 +305,8 @@ export default function App() {
             onOpenEditRecord={handleOpenEditRecord}
             onOpenDeleteConfirm={handleOpenDeleteConfirm}
             refreshTrigger={refreshTrigger}
+            dateRange={dateRange}
+            onDateRangeChange={setDateRange}
           />
         )}
       </main>
